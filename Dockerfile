@@ -1,19 +1,29 @@
+FROM ubuntu as build
+
+RUN apt-get update && apt-get -y install \
+  libcurl4-openssl-dev \
+  gcc \
+  xdg-utils \
+  make \
+  curl \
+  git \
+  xz-utils \
+  libsqlite3-dev
+
+RUN curl -fsS https://dlang.org/install.sh | bash -s dmd
+
+RUN /bin/bash -c "source ~/dlang/dmd-*/activate"
+
+RUN git clone https://github.com/skilion/onedrive.git
+RUN /bin/bash -c "source ~/dlang/dmd-*/activate && cd onedrive && make && make install"
+
 FROM ubuntu
-MAINTAINER Jimmy Koo<kukkiz@gmail.com>
 
-RUN apt-get update
-#RUN apt-get -y install libcurl4-gnutls-dev
-#RUN apt-get -y install libcurl4-nss-dev
-RUN apt-get -y install libcurl4-openssl-dev
-RUN apt-get -y install gcc xdg-utils unzip make wget
-RUN apt-get -y install libsqlite3-dev
+RUN apt-get update && apt-get -y install \
+  libcurl4-openssl-dev \
+  libsqlite3-dev
 
-RUN wget http://downloads.dlang.org/releases/2.x/2.071.1/dmd_2.071.1-0_amd64.deb -O dmd.deb && dpkg -i dmd.deb
-
-RUN wget https://github.com/skilion/onedrive/archive/master.zip && unzip master.zip
-
-RUN cd onedrive-master && make && make install
-
+COPY --from=build /usr/local/bin/onedrive /usr/local/bin/onedrive
 
 VOLUME ["/usr/local/etc/my_onedrive.conf", "/onedrive"]
 
@@ -21,5 +31,7 @@ RUN mkdir /root/.config
 
 ADD ./onedrive.conf /root/.config/
 ADD ./start.sh /root/
+
+RUN apt-get clean
 
 CMD /root/start.sh
