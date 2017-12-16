@@ -10,48 +10,18 @@ This is a useful tool to synchronize your data between OneDrive (personal accoun
 
 ## Quick Start
 
-#### Step 1
+```shell
+mkdir onedrive && cd onedrive
+```
+* Follow the url displayed
+* Authenticate yourself on Microsoft cloud
+* Copy the link of the downloaded file you get from Microsoft
+* Paste the link in to the console
 
 ```shell
-docker pull kukki/docker-onedrive
+docker run -d --restart on-failure --name onedrive -v `pwd`/config:/root/.config -v `pwd`/data:/root/OneDrive olegfiksel/docker-onedrive
+docker logs -f onedrive
 ```
-
-#### Step 2
-
-```shell
-docker run -it --restart on-failure --name docker-onedrive
-  -v /path/to/onedrive:/onedrive
-  kukki/docker-onedrive
-```
-
-*Note:*
-
-- Update `/path/to` to your actual path of onedrive root and onedrive.conf.
-- `--restart on-failure` is to set auto-restart when the sync is timeout due to the connection.
-
-#### Step 3
-
-* Copy the URL in the prompt and visit it on your browser.
-
-* It authenticates and authorizes your Microsoft account.
-
-* After you accept the application, a response URI is updated in the browser.
-
-* Copy the URI to the prompt and hit `Enter`
-
-#### Step 4
-
-You can keep the docker container running in the foreground.
-
--- or --
-
-You can hit `CTRL-C` to stop it and then **re-start** the container.
-
-```shell
-docker start docker-onedrive
-```
-
-
 
 ## Advanced Use
 
@@ -88,7 +58,7 @@ docker rm docker-onedrive
 docker run -it --restart on-failure --name docker_onedrive
   -v /path/to/onedrive:/onedrive
   -v /path/to/onedrive.conf:/usr/local/etc/onedrive.conf
-  kukki/docker-onedrive
+  olegfiksel/docker-onedrive
 ```
 
 * Follow `step 3` and `step 4` in `Quick Start`.
