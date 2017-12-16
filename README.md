@@ -11,7 +11,8 @@ This is a useful tool to synchronize your data between OneDrive (personal accoun
 ## Quick Start
 
 ```shell
-mkdir onedrive && cd onedrive
+mkdir onedrive && cd onedrive && \
+  docker run --rm -ti -v `pwd`/config:/root/.config -v `pwd`/data:/root/OneDrive olegfiksel/docker-onedrive onedrive
 ```
 * Follow the url displayed
 * Authenticate yourself on Microsoft cloud
