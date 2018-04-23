@@ -14,7 +14,7 @@ RUN curl -fsS https://dlang.org/install.sh | bash -s dmd
 
 RUN /bin/bash -c "source ~/dlang/dmd-*/activate"
 
-RUN git clone https://github.com/skilion/onedrive.git
+RUN git clone https://github.com/abraunegg/onedrive.git
 RUN /bin/bash -c "source ~/dlang/dmd-*/activate && cd onedrive && make && make install"
 
 FROM ubuntu
