@@ -7,15 +7,18 @@ RUN apt-get update && apt-get -y install \
   make \
   curl \
   git \
+  gpg \
   xz-utils \
+  build-essential \
+  pkg-config \
   libsqlite3-dev
 
 RUN curl -fsS https://dlang.org/install.sh | bash -s dmd
 
 RUN /bin/bash -c "source ~/dlang/dmd-*/activate"
 
-RUN git clone https://github.com/abraunegg/onedrive.git
-RUN /bin/bash -c "source ~/dlang/dmd-*/activate && cd onedrive && make && make install"
+RUN git clone -b v2.3.10 https://github.com/abraunegg/onedrive.git
+RUN /bin/bash -c "source ~/dlang/dmd-*/activate && cd onedrive && ./configure && make clean && make && make install"
 
 FROM ubuntu
 
